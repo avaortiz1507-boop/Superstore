@@ -4,11 +4,10 @@ This project consists of a front-end written in React.js, a back-end written in 
 ## Superstore API
 
 ### Address
-- GET /api/addresses
-- GET /api/addresses/{id}
-- POST /api/addresses
-- PUT /api/addresses/{id}
-- DELETE /api/addresses/{id}
+- **GET** /api/addresses/{id}
+- **POST** /api/addresses
+- **PUT** /api/addresses/{id}
+- **DELETE** /api/addresses/{id}
   
   ---
 ### AddressType (Lookup Table)
@@ -26,6 +25,8 @@ This project consists of a front-end written in React.js, a back-end written in 
 ### Customer
 - **GET** /api/customers
 - **GET** /api/customers/{id}
+- **GET** /api/customers/{id}/addresses
+- **GET** /api/customers/{id}/orders
 - **POST** /api/customers
 - **PUT** /api/customers/{id}
 - **DELETE** /api/customers/{id}
@@ -34,14 +35,11 @@ This project consists of a front-end written in React.js, a back-end written in 
 ### Order
 - **GET** /api/orders
 - **GET** /api/orders/{id}
+- **GET** /api/orders/{id}/orderdetails
 - **POST** /api/orders
 - **PUT** /api/orders/{id}
 - **DELETE** /api/orders/{id}
 
----
-### OrderDetail
-- **GET** /api/orderdetails
-- **GET** /api/orderdetails/{id}
 ---
 ### Product
 - **GET** /api/products
