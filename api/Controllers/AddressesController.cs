@@ -1,4 +1,7 @@
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace api.Controllers;
 
@@ -6,6 +9,13 @@ namespace api.Controllers;
 [Route("api/[controller]")]
 public class AddressesController : ControllerBase
 {
+
+    private readonly IConfiguration _configuration;
+
+    public AddressesController(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
   [HttpGet(Name = "GetAddresses")]
     public IActionResult Get()
     {
@@ -44,6 +54,50 @@ public class AddressesController : ControllerBase
                 CustomerID = 2
             }
         });
+    }
+    [HttpGet("{id}", Name = "GetAddressById")]
+    public IActionResult Get(int id)
+    {
+        try
+        {
+           Address address = new Address ();
+
+           // get connection string from appsettings.json
+            string? connectionString = _configuration.GetConnectionString("Superstore");
+                                  
+           // open connection to database
+            
+            using (SqlConnection connection = new SqlConnection(connectionString))
+{
+            connection.Open();
+            // inside connection, execute a stored procedure to get the address by id
+
+            SqlCommand command = new SqlCommand("GetAddress", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@AddressID", id);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                // map the result to the address object
+                address.AddressID = (int)reader["AddressID"];
+                address.AddressLine1 = reader["AddressLine1"].ToString();
+                address.AddressLine2 = reader["AddressLine2"].ToString();
+                address.City = reader["City"].ToString() ?? string.Empty;
+                address.State = reader["State"].ToString() ?? string.Empty;
+                address.PostalCode = (int)reader["PostalCode"];
+                address.Country = reader["Country"].ToString() ?? string.Empty;
+                address.Region = reader["Region"].ToString() ?? string.Empty;
+                address.AddressType = reader["AddressType"].ToString() ?? string.Empty;
+                address.CustomerID = (int)reader["CustomerID"];
+            }
+}
+
+           return Ok(address); 
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 }
   
