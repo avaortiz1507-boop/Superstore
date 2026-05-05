@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import AddressList from './components/Address/List';
+import AddressList from './components/address/List';
 
 function App() {
   return (
