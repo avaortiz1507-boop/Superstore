@@ -1,4 +1,4 @@
-class Address
+public class Address
 {
   public int AddressID { get; set; }
   public string? AddressLine1 { get; set; }
