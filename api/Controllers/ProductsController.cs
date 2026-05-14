@@ -27,9 +27,9 @@ public class ProductsController : ControllerBase
             List<Product> products = rows.Select(MapToProduct).ToList();
             return Ok(products);
         }
-        catch
+        catch(Exception ex)
         {
-            return StatusCode(500, "An error occurred while processing your request.");
+            return StatusCode(500, $"An error occurred while processing your request. {ex.Message}");
         }
     }
 
