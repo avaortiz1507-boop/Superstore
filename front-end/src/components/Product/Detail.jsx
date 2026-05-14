@@ -1,4 +1,10 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
+
 export default function ProductDetail() {
+    const { id } = useParams();
+    console.log("Product ID:", id);
+
     return (
         <div>
             <h2>Product Detail</h2>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { read } from '../../api/fetch-wrapper';
+import { Link } from 'react-router';
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -39,16 +40,27 @@ export default function ProductList() {
                   <th>Sub-category</th>
                   <th>Unit Price</th>
                   <th>Quantity</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {products.map((product) => (
                   <tr key={product.productID ?? product.ProductID}>
-                    <td>{product.productName ?? product.ProductName}</td>
-                    <td>{product.category ?? product.Category}</td>
+                    <td>
+                      <Link to ={`/products/${product.productID ?? product.ProductID}`}>
+                      {product.productName ?? product.ProductName}
+                      </Link>
+                      </td>
+                    <td>
+                      {product.category ?? product.Category}
+                      </td>
                     <td>{product.subCategory ?? product.SubCategory}</td>
-                    <td>{product.unitPrice ?? product.UnitPrice}</td>
+                    <td>${(product.unitPrice ?? product.UnitPrice).toFixed(2)}</td>
                     <td>{product.quantity ?? product.Quantity}</td>
+                    <td>
+                      <button>Edit</button>
+                      <button>Delete</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
