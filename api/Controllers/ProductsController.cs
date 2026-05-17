@@ -33,6 +33,26 @@ public class ProductsController : ControllerBase
         }
     }
 
+    [HttpGet("{id}", Name = "GetProductByID")]
+
+    public async Task<IActionResult> Get(int id)
+    {
+        try
+        {
+            var row = await _db.QuerySingleAsync("GetProduct", new SqlParameter("ProductID", id));
+            if (row == null)
+                return NotFound();
+
+            Product product = MapToProduct(row);
+            return Ok(product);
+        }
+        catch(Exception ex)
+        {
+            return StatusCode(500, $"An error occurred while processing your request. {ex.Message}");
+        }
+    }
+
+
     private static Product MapToProduct(Dictionary<string,object?> row) => new Product
     {
         ProductID = Convert.ToInt32(row["ProductID"]),
