@@ -23,9 +23,9 @@ public class AddressTypesController : ControllerBase
         try
         {
             List<Dictionary<string, object?>> rows = await _db.QueryAsync("GetAllAddressTypes");
-            List<AddressType> addressTypes = rows.Select(MapToAddressType).ToList();
+            List<AddressType> addresstypes = rows.Select(MapToAddressType).ToList();
 
-            return Ok(addressTypes);
+            return Ok(addresstypes);
         }
         catch(Exception ex)
         {
