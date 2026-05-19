@@ -50,10 +50,8 @@ export default function ProductList() {
                       <Link to ={`/products/${product.productID ?? product.ProductID}`}>
                       {product.productName ?? product.ProductName}
                       </Link>
-                      </td>
-                    <td>
-                      {product.category ?? product.Category}
-                      </td>
+                    </td>
+                    <td>{product.category ?? product.Category}</td>
                     <td>{product.subCategory ?? product.SubCategory}</td>
                     <td>${(product.unitPrice ?? product.UnitPrice).toFixed(2)}</td>
                     <td>{product.quantity ?? product.Quantity}</td>
