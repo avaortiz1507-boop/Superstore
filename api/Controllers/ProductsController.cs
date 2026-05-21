@@ -52,6 +52,29 @@ public class ProductsController : ControllerBase
         }
     }
 
+    [HttpPost(Name = "CreateProduct")]
+    public async Task<IActionResult> Post([FromBody] Product product)
+    {
+        try
+        {
+            var parameters = new[]
+            {
+                new SqlParameter("@ProductName", product.ProductName),
+                new SqlParameter("@CategoryID", product.CategoryID),
+                new SqlParameter("@SubCategoryID", product.SubCategoryID),
+                new SqlParameter("@UnitPrice", product.UnitPrice),
+                new SqlParameter("@Quantity", product.Quantity)
+            };
+
+            int newProductID = await _db.ExecuteAsync("CreateProduct", parameters);
+            return CreatedAtRoute("GetProductByID", new { id = newProductID }, null);
+        }
+
+        catch(Exception ex)
+        {
+            return StatusCode(500, $"An error occurred while processing your request. {ex.Message}");
+        }
+    }
 
     private static Product MapToProduct(Dictionary<string,object?> row) => new Product
     {
