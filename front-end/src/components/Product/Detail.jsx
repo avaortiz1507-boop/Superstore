@@ -89,9 +89,9 @@ export default function ProductDetail() {
           </tr>
           <tr>
             <td>
-              <strong>Quantity:</strong>
+              <strong>Inventory:</strong>
             </td>
-            <td>{product.quantity}</td>
+            <td>{product.inventory}</td>
           </tr>
         </tbody>
       </table>

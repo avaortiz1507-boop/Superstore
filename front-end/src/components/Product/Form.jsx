@@ -6,7 +6,7 @@ const emptyForm = {
   categoryID: "",
   subCategoryID: "",
   unitPrice: "",
-  quantity: "",
+  inventory: "",
 };
 
 export default function ProductForm({ initialValues = emptyForm }) {
