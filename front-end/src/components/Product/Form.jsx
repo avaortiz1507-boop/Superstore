@@ -9,19 +9,21 @@ const emptyForm = {
   inventory: "",
 };
 
-export default function ProductForm({ initialValues = emptyForm }) {
-  const [form, setForm] = useState(initialValues);
+export default function ProductForm({ initialValues = emptyForm, onSubmit }) {
+  const [form, setForm] = useState(initialValues); // form = emptyForm
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
 
+  const handleCancel = () => {
+    window.history.back();
+  };
+
   useEffect(() => {
-    console.log("Fetching categories and subcategories...");
     const fetchCategories = async () => {
       try {
         const data = await read("categories");
-        console.log("Fetched categories:", data);
         setCategories(data);
       } catch (err) {
         setError(err.message);
@@ -31,7 +33,6 @@ export default function ProductForm({ initialValues = emptyForm }) {
     const fetchSubCategories = async () => {
       try {
         const data = await read("subcategories");
-        console.log("Fetched subcategories:", data);
         setSubCategories(data);
       } catch (err) {
         setError(err.message);
@@ -42,12 +43,50 @@ export default function ProductForm({ initialValues = emptyForm }) {
     fetchSubCategories();
   }, []);
 
+    const handleChange = event => {
+      const { name, value } = event.target;
+      setForm(prevForm => ({
+        ...prevForm,
+        [name]: value
+      }));
+    };
+
+    const handleSubmit = async event => {
+        event.preventDefault();
+
+        setError(null);
+        setSubmitting(true);
+
+        try {
+            await onSubmit({
+                productName: form.productName,
+                categoryID: parseInt(form.categoryID),
+                subCategoryID: parseInt(form.subCategoryID),
+                unitPrice: parseFloat(form.unitPrice),
+                inventory: parseInt(form.inventory)
+            });
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setSubmitting(false);
+        }
+    };
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <div>
-        <label for="categoryID">Category</label>
-        <select name="categoryID" value={form.categoryID} required>
+        <label htmlFor="productName">Product Name</label>
+        <input
+            type="text"
+            name="productName"
+            value={form.productName}
+            onChange={handleChange} 
+            required
+        />
+      </div>
+      <div>
+        <label htmlFor="categoryID">Category</label>
+        <select name="categoryID" value={form.categoryID} onChange={handleChange} required>
           <option value="">Select a category</option>
           {categories.map((category) => (
             <option key={category.categoryID} value={category.categoryID}>
@@ -58,8 +97,8 @@ export default function ProductForm({ initialValues = emptyForm }) {
       </div>
 
       <div>
-        <label for="subCategoryID">Subcategory</label>
-        <select name="subCategoryID" value={form.subCategoryID} required>
+        <label htmlFor="subCategoryID">Subcategory</label>
+        <select name="subCategoryID" value={form.subCategoryID} onChange={handleChange} required>
           <option value="">Select a subcategory</option>
           {subCategories.map((subCategory) => (
             <option
@@ -71,6 +110,40 @@ export default function ProductForm({ initialValues = emptyForm }) {
           ))}
         </select>
       </div>
+
+      <div>
+        <label htmlFor="unitPrice">Unit Price</label>
+        <input
+            type="number"
+            name="unitPrice"
+            step="0.01"
+            min="0"
+            value={form.unitPrice}
+            onChange={handleChange} 
+            required
+        />
+      </div>
+
+         <div>
+        <label htmlFor="inventory">Inventory</label>
+        <input
+            type="number"
+            name="inventory"
+            min="0"
+            value={form.inventory}
+            onChange={handleChange} 
+            required
+        />
+      </div>
+       <div>
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Submitting..." : "Submit"}
+        </button>
+        <button type="button" onClick={handleCancel}>
+          Cancel
+        </button>
+      </div>
     </form>
+    
   );
 }
