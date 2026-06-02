@@ -11,7 +11,7 @@ GO
 -- Description:	Create a Order
 -- EXEC CreateOrder @CustomerID = 1, @SalesPrice = 500.67, @Quantity = 5, @Discount = 0.00, @Profit = 200.90, @ShipModeID = 1
 -- =============================================
-ALTER PROCEDURE [dbo].[CreateOrder]
+CREATE PROCEDURE [dbo].[CreateOrder]
     @CustomerID INT,
     @SalesPrice DECIMAL(18,2),
     @Quantity INT,
